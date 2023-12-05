@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+struct Node {
+    char data;
+    Node* left;
+    Node* right;
+};
+
+Node* newNode(char data) {
+    Node* node = new Node;
+    node->data = data;
+    node->left = node->right = NULL;
+    return node;
+}
+
+Node* buildExpressionTree(std::string prefix) {
+    std::vector<Node*> stack;
+    for(int i = prefix.length() - 1; i >= 0; i--) {
+        if(isdigit(prefix[i])) {
+            stack.push_back(newNode(prefix[i]));
+        } else {
+            Node* right = stack.back();
+            stack.pop_back();
+            Node* left = stack.back();
+            stack.pop_back();
+            stack.push_back(newNode(prefix[i]));
+            stack.back()->left = left;
+            stack.back()->right = right;
+        }
+    }
+    return stack.back();
+}
+
+void printInorder(Node* node) {
+    if(node == NULL) return;
+    printInorder(node->left);
+    std::cout << node->data << " ";
+    printInorder(node->right);
+}
+
+void printPreorder(Node* node) {
+    if(node == NULL) return;
+    std::cout << node->data << " ";
+    printPreorder(node->left);
+    printPreorder(node->right);
+}
+
+void printPostorder(Node* node) {
+    if(node == NULL) return;
+    printPostorder(node->left);
+    printPostorder(node->right);
+    std::cout << node->data << " ";
+}
+
+int main() {
+    std::string prefix = "*-A/BC-/AKL";
+    Node* root = buildExpressionTree(prefix);
+    std::cout << "Inorder traversal: ";
+    printInorder(root);
+    std::cout << "\nPreorder traversal: ";
+    printPreorder(root);
+    std::cout << "\nPostorder traversal: ";
+    printPostorder(root);
+    return 0;
+}
