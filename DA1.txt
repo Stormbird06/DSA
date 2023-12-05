@@ -1,0 +1,103 @@
+#include<iostream> 
+using namespace std; 
+struct student 
+{ 
+ int Rollno; 
+ char name[20]; 
+ float per; 
+ }; 
+ 
+ void create(student [],int); 
+ void display(student [],int); 
+ void bubblesort(student[],int); 
+ int linear_search(student[],int,int); 
+ 
+ void create( student s[20],int n) 
+ { 
+ int i; 
+ cout<<"\n Enter the details of Students"; 
+ cout<<"\n Rollno"<<"\t"<<"Name"<<"\t"<<"per"; 
+ for(i=0;i<n;i++) 
+ cin>>s[i].Rollno>>s[i].name>>s[i].per; 
+ 
+ } 
+ void display(student s[20],int n) 
+ { 
+ int i; 
+ cout<<"\n Details of Students\n"; 
+ for(i=0;i<n;i++) 
+ cout<<s[i].Rollno<<"\t"<<s[i].name<<"\t"<<s[i].per<<"\n"; 
+ 
+ } 
+ void bubblesort(student s[20],int n) 
+ { 
+ int i,j; 
+ student temp; 
+ for(i=0;i<n;i++) 
+ { 
+ for(j=0;j<n-i-1;j++) 
+ { 
+ if(s[j].Rollno> s[j+1].Rollno) 
+ { 
+ 
+ temp=s[j]; 
+ s[j]=s[j+1]; 
+ s[j+1]=temp; 
+ } 
+ } 
+ } 
+ } 
+ 
+ 
+ 
+ 
+ int linear_search(student s[20],int n,int rno) 
+ { 
+ int i; 
+ for(i=0;i<n;i++) 
+ { 
+ if(s[i].Rollno==rno) 
+ { 
+ break; 
+ } 
+ } 
+ return i; 
+ } 
+ 
+int main() 
+ { 
+ struct student s[20]; 
+ int n, ch ,ch1,i,rno; 
+ do 
+ { 
+ cout<<"\n 1. Create Database"; 
+ cout<<"\n 2.Bubblesort"; 
+ cout<<"\n 3.Linear Search"; 
+ cout<<"\n Enter the choice"; 
+ cin>>ch; 
+ switch(ch) 
+ { 
+ case 1: 
+ cout<<"\n Enter the number of Records"; 
+ cin>>n; 
+ create(s,n); 
+ display(s,n); 
+ break; 
+ 
+ case 2: 
+ bubblesort(s,n); 
+ display(s,n); 
+ break; 
+ 
+ case 3: 
+ cout<<"\n Enter the rollnumber you want to search"; 
+ cin>>rno; 
+ i=linear_search(s,n,rno); 
+ cout<<"\n Element found at location "<<i+1; 
+ break; 
+ 
+ } 
+ 
+ }while(ch1!=4); 
+ return 0; 
+ } 

@@ -1,0 +1,125 @@
+#include <iostream>
+#include <string.h>
+using namespace std; 
+#define max 20 
+class prim
+{ 
+public: 
+void PrimsAlgorithm(int [max][max],char [max][max],int); 
+}; 
+const int infinity=999; 
+static int total,total_cost; 
+void prim::PrimsAlgorithm(int adjacent_vertex[max][max],char
+country[max][max],int start) 
+{ 
+int
+visited[max],cost[max][max],i,j,min=0,min2,pre,pos,least=0; 
+//here cost is the distance between each country
+for(i=0;i<total;i++) 
+ visited[i]=0;//initializing visited to 0
+for(i=0;i<total;i++) 
+ { 
+ for(j=0;j<total;j++) 
+ { 
+ if(i==j) 
+ cost[i][j]=infinity;//making same country 
+to same country distance infinity
+ else
+ { 
+ cost[i][j]=adjacent_vertex[i][j];//storing 
+in cost
+ } 
+ } 
+ } 
+ pos=start; 
+ visited[start]=1; 
+ cout<<"\n"<<country[pos]; 
+ total_cost=0; 
+for(i=0;i<total-1;i++) 
+ { 
+ min=cost[pos][0]; 
+ for(j=0;j<total;j++) 
+ { 
+ if(cost[pos][j]<=min && visited[j]==0 && 
+cost[pos][j]!=999)//first comparing that do we got any minimum
+ { 
+ min=cost[pos][j]; 
+ least=j; 
+ } 
+ } 
+ for(j=0;j<total;j++) 
+ { //if any test cases fail try cost<min instead 
+cost<=min ,in above if condition also do same
+ 
+if(cost[pre][j]<=min&&visited[j]==0&&cost[pre][j]!=999)//
+again comparing same as prim on paper
+ { 
+ min=cost[pre][j];//if we got less distance 
+than minimum than replace
+ least=j; 
+ } 
+ } 
+ total_cost=total_cost+min; 
+ visited[least]=1; 
+ pre=pos;//storing previous node
+ pos=least;//storing next node
+ cout<<"==>"<<country[least]; 
+ } 
+ cout<<"\nTotal Cost is:-"<<total_cost; 
+} 
+int main() 
+{ 
+prim p; 
+int i,j,adjacent_vertex[max][max],pos,repeat=0; 
+char country[max][max],start[max]; 
+do{ 
+ cout<<"Enter no of offices in different countries:-"; 
+ cin>>total; 
+ cout<<"\nPlease use 999 as distance between two non 
+adjacent or unconnected countries\n"; 
+//taking different countries names
+for(i=0;i<total;i++) 
+ { 
+ cout<<"\nEnter "<<i+1<<" Country name :-"; 
+ cin>>country[i]; 
+ } 
+//taking input for adjacency matrix i.e. distance between each 
+other
+//initializing it with infinity
+for(i=0;i<total;i++) 
+ { 
+ for(j=0;j<total;j++) 
+ adjacent_vertex[i][j]=infinity; 
+ } 
+for(i=0;i<total;i++) 
+ { 
+ for(j=i;j<total;j++) 
+ { 
+ if(i==j) 
+ adjacent_vertex[i][j]=0;//in prims it get 
+to infinity in short it doesnt matter
+ else
+ { 
+ cout<<"Enter distance between 
+"<<country[i]<<" and "<<country[j]<<" in thousand kilometers"; 
+ cin>>adjacent_vertex[i][j]; 
+ 
+ adjacent_vertex[j][i]=adjacent_vertex[i][j];//j i=i j 
+making them same
+ } 
+ } 
+ } 
+ cout<<"\nEnter starting office from where to start:-"; 
+ cin>>start; 
+for(i=0;i<total;i++) 
+ { 
+ if(strcmp(start,country[i])==0)//getting the 
+starting vertex
+ break; 
+ } 
+ pos=i; 
+ p.PrimsAlgorithm(adjacent_vertex,country,pos); 
+ cout<<"\nPress 1 to continue it again\n"; 
+ }while(repeat==1); 
+return 0; 
+} 

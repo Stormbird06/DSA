@@ -1,0 +1,135 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <algorithm>
+
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+    Node* parent;
+};
+
+Node* newNode(int data) {
+    Node* node = new Node;
+    node->data = data;
+    node->left = node->right = node->parent = NULL;
+    return node;
+}
+
+Node* insert(Node* root, int data) {
+    if(root == NULL) {
+        return newNode(data);
+    }
+
+    if(data < root->data) {
+        root->left = insert(root->left, data);
+        root->left->parent = root;
+    } else if(data > root->data) {
+        root->right = insert(root->right, data);
+        root->right->parent = root;
+    }
+
+    return root;
+}
+
+Node* deleteNode(Node* root, int data) {
+    if(root == NULL) return root;
+
+    if(data < root->data) {
+        root->left = deleteNode(root->left, data);
+    } else if(data > root->data) {
+        root->right = deleteNode(root->right, data);
+    } else {
+        if(root->left == NULL) {
+            Node* temp = root->right;
+            delete root;
+            return temp;
+        } else if(root->right == NULL) {
+            Node* temp = root->left;
+            delete root;
+            return temp;
+        }
+
+        Node* temp = minValueNode(root->right);
+        root->data = temp->data;
+        root->right = deleteNode(root->right, temp->data);
+    }
+
+    return root;
+}
+
+Node* search(Node* root, int data) {
+    if(root == NULL || root->data == data) {
+        return root;
+    }
+
+    if(data < root->data) {
+        return search(root->left, data);
+    }
+
+    return search(root->right, data);
+}
+
+Node* minValueNode(Node* root) {
+    Node* current = root;
+    while(current && current->left != NULL) {
+        current = current->left;
+    }
+    return current;
+}
+
+int getDepth(Node* root) {
+    if(root == NULL) return 0;
+    return std::max(getDepth(root->left), getDepth(root->right)) + 1;
+}
+
+void mirrorImage(Node* root) {
+    if(root == NULL) return;
+    mirrorImage(root->left);
+    mirrorImage(root->right);
+    Node* temp = root->left;
+    root->left = root->right;
+    root->right = temp;
+}
+
+void display(Node* root) {
+    if(root == NULL) return;
+    display(root->left);
+    std::cout << root->data << " ";
+    display(root->right);
+}
+
+void displayLevelWise(Node* root) {
+    if(root == NULL) return;
+    std::queue<Node*> queue;
+    queue.push(root);
+
+    while(!queue.empty()) {
+        Node* current = queue.front();
+        queue.pop();
+        std::cout << current->data << " ";
+
+        if(current->left != NULL) {
+            queue.push(current->left);
+        }
+
+        if(current->right != NULL) {
+            queue.push(current->right);
+        }
+    }
+}
+
+int main() {
+    Node* root = NULL;
+    root = insert(root, 50);
+    insert(root, 30);
+    insert(root, 20);
+    insert(root, 40);
+    insert(root, 70);
+    insert(root, 60);
+    insert(root, 80);
+
+    std::cout << "Display (preorder traversal): ";
+    display(root);
+    std::cout <<

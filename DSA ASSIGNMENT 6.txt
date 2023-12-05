@@ -1,0 +1,97 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Node {
+    public:
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int data) {
+        this->data = data;
+        this->left = NULL;
+        this->right = NULL;
+    }
+};
+
+void insertInThreadedBinaryTree(Node*& root, int data) {
+    if (root == NULL) {
+        root = new Node(data);
+        return;
+    }
+
+    Node* current = root;
+
+    while (true) {
+        if (data < current->data) {
+            if (current->left == NULL) {
+                current->left = new Node(data);
+                break;
+            } else {
+                current = current->left;
+            }
+        } else {
+            if (current->right == NULL) {
+                current->right = new Node(data);
+                break;
+            } else {
+                current = current->right;
+            }
+        }
+    }
+}
+
+void inOrderTraversal(Node* root) {
+    if (root == NULL) return;
+
+    while (root->left != NULL) {
+        root = root->left;
+    }
+
+    while (root != NULL) {
+        cout << root->data << " ";
+        root = root->right;
+    }
+}
+
+void preOrderTraversal(Node* root) {
+    if (root == NULL) return;
+
+    stack<Node*> stack;
+    stack.push(root);
+
+    while (!stack.empty()) {
+        Node* current = stack.top();
+        stack.pop();
+
+        cout << current->data << " ";
+
+        if (current->right != NULL) {
+            stack.push(current->right);
+        }
+
+        if (current->left != NULL) {
+            stack.push(current->left);
+        }
+    }
+}
+
+int main() {
+    Node* root = NULL;
+
+    insertInThreadedBinaryTree(root, 10);
+    insertInThreadedBinaryTree(root, 20);
+    insertInThreadedBinaryTree(root, 30);
+    insertInThreadedBinaryTree(root, 40);
+    insertInThreadedBinaryTree(root, 50);
+
+    cout << "In-order Traversal: ";
+    inOrderTraversal(root);
+    cout << endl;
+
+    cout << "Pre-order Traversal: ";
+    preOrderTraversal(root);
+    cout << endl;
+
+    return 0;
+}
